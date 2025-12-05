@@ -1,34 +1,18 @@
 package ui;
 
-import configs.TestPropertiesConfig;
-import org.aeonbits.owner.ConfigFactory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import base.BaseUITest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Sel {
-    WebDriver driver;
-    TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
-
-    @BeforeEach
-    void setup() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-    }
-
-    @AfterEach
-    void tearDown() {
-        driver.quit();
-    }
+public class Selen extends BaseUITest {
 
     @Test
     void openHomePageTest() {
@@ -57,7 +41,9 @@ public class Sel {
         driver.findElement(By.id("username")).sendKeys(config.getUsername());
         driver.findElement(By.id("password")).sendKeys(config.getPassword());
         driver.findElement(By.xpath("//button[@type = 'submit']")).click();
-        WebElement message = driver.findElement(By.className("alert"));
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert")));
 
         assertEquals("Login successful", message.getText());
     }

@@ -14,18 +14,6 @@ public class TestConfig {
         properties = getPropertiesByEnv(env);
     }
 
-    public String getBaseUrl() {
-        return getFieldByName("baseUrl");
-    }
-
-    public String getUsername() {
-        return getFieldByName("username");
-    }
-
-    public String getPassword() {
-        return getFieldByName("password");
-    }
-
     private String getFieldByName(String fieldName) {
         String field = properties.getProperty(fieldName);
         if (field == null || field.isEmpty()) {
