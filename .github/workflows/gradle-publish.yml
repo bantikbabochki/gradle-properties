@@ -15,6 +15,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: ui tests
     permissions:
       contents: write
       pages: write
@@ -45,7 +46,7 @@ jobs:
     - name: Build with Gradle Wrapper
       env:
         SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
-      run: ./gradlew test
+      run: ./gradlew clean test
 
     - name: Copy History
       uses: actions/checkout@v2
