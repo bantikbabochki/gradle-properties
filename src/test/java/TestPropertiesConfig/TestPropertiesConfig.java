@@ -1,4 +1,4 @@
-package configs;
+package TestPropertiesConfig;
 
 import constants.Constants;
 import org.aeonbits.owner.Config;
