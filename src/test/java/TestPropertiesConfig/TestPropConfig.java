@@ -8,7 +8,7 @@ import org.aeonbits.owner.Config;
         "classpath:test.properties",
         "classpath:default.properties"
 })
-public interface TestPropertiesConfig extends Config {
+public interface TestPropConfig extends Config {
 
     @Key("baseUrl")
     @DefaultValue(Constants.BASE_URL)
