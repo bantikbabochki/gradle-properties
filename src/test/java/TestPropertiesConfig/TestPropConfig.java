@@ -4,7 +4,7 @@ import constants.Constants;
 import org.aeonbits.owner.Config;
 
 @Config.Sources({
-        "classpath:ci.properties",
+        "file:${user.dir}/build/tmp/ci.properties",
         "classpath:${env}.properties",
         "classpath:test.properties"
 })

@@ -44,14 +44,11 @@ public abstract class BaseUITest {
             // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
 
             // Сохраняем во временный файл
-            File temp = new File("build/resources/test");
-            if (!temp.exists() && !temp.mkdirs()) {
-                throw new RuntimeException("Failed to create directory: " + temp.getAbsolutePath());
-            }
-            File propFile = new File(temp, "ci.properties");
+            File temp = new File("src/test/resources/ci.properties");
+            temp.getParentFile().mkdirs();// гарантирует, что папка существует
 
             // Записываем файл
-            try (FileOutputStream out = new FileOutputStream(propFile)) {
+            try (FileOutputStream out = new FileOutputStream(temp)) {
                 properties.store(out, "Generated from TEST_PROPERTIES_CONTENT");
             } catch (IOException e) {
                 throw new RuntimeException("Failed to write ci.properties", e);
@@ -59,16 +56,11 @@ public abstract class BaseUITest {
 
             // ДИАГНОСТИКА (удалить после отладки)
             // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — НАЧАЛО
-            System.out.println("=== CONFIG DEBUG START ===");
-            System.out.println("JSON length: " + jsonSecret.length());
-            System.out.println("Parsed properties count: " + properties.size());
-            System.out.println("ci.properties path: " + propFile.getAbsolutePath());
-            System.out.println("ci.properties content:");
-            properties.list(System.out);
-            System.out.println("=== CONFIG DEBUG END ===");
-            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
-            System.out.println("Using config file: " + System.getProperty("config.file"));
+            System.out.println("=== CONFIG DEBUG ===");
+            System.out.println("ci.properties path: " + temp.getAbsolutePath());
             System.out.println("baseUrl = [" + properties.getProperty("baseUrl") + "]");
+            System.out.println("====================");
+            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
         }
 
         // Инициализируем Owner
