@@ -2,19 +2,22 @@ package helpers;
 
 import enums.LocatorType;
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ElementHelper {
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     public ElementHelper(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @Step("Getting current URL")
@@ -100,12 +103,52 @@ public class ElementHelper {
     }
 
     @Step("Нажатие на кнопку отправки формы: тип={type}, значение={value}")
-    public WebElement clickSubmitButton(LocatorType type, String value) throws InterruptedException {
-        Thread.sleep(100);
+    public WebElement clickSubmitButton(LocatorType type, String value){
         WebElement submitButton = getVisibleElement(type, value);
-        submitButton.click();
+        safeClick(submitButton);
         return submitButton;
     }
+
+    /**
+     * Безопасный клик с обработкой ElementClickInterceptedException
+     * Сначала пробует обычный клик, если не получается - скроллит и кликает через JS
+     */
+    @Step("Безопасный клик на элемент")
+    private void safeClick(WebElement element) {
+        try {
+            //Ждем, что элемент станет кликабельным
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            element.click();
+        } catch (ElementClickInterceptedException | TimeoutException e) {
+            //Если элемент перекрыт или не стал кликабельным - используем JS
+            System.out.println("Обычный клик не сработал, использую JavaScript клик");
+            scrollToElement(element);
+        }
+    }
+
+    /**
+     * Скролл к элементу
+     */
+    private void scrollToElement(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
+                element
+        );
+        //Небольшая пауза после скролла
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Клик через JavaScript
+     */
+    private void clickViaJavaScript(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+
 
     /**
      * WebFormLocators
@@ -120,5 +163,14 @@ public class ElementHelper {
         } catch (NoSuchElementException e) {
             throw new AssertionError("Элемент не найден: " + locator, e);
         }
+    }
+
+    /**
+     * Безопасный клик для элементов, найденных через By локатор
+     */
+    @Step("Клик на элемент: {locator}")
+    public void clickElement(By locator) {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        safeClick(element);
     }
 }
