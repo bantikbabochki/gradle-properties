@@ -44,7 +44,7 @@ public abstract class BaseUITest {
             // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
 
             // Сохраняем во временный файл
-            File temp = new File("build/tmp");
+            File temp = new File("build/resources/test");
             if (!temp.exists() && !temp.mkdirs()) {
                 throw new RuntimeException("Failed to create directory: " + temp.getAbsolutePath());
             }
@@ -57,10 +57,16 @@ public abstract class BaseUITest {
                 throw new RuntimeException("Failed to write ci.properties", e);
             }
 
-            // Передаём путь через системное свойство
-            System.setProperty("config.file", "file://" + propFile.getAbsolutePath());
-
             // ДИАГНОСТИКА (удалить после отладки)
+            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — НАЧАЛО
+            System.out.println("=== CONFIG DEBUG START ===");
+            System.out.println("JSON length: " + jsonSecret.length());
+            System.out.println("Parsed properties count: " + properties.size());
+            System.out.println("ci.properties path: " + propFile.getAbsolutePath());
+            System.out.println("ci.properties content:");
+            properties.list(System.out);
+            System.out.println("=== CONFIG DEBUG END ===");
+            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
             System.out.println("Using config file: " + System.getProperty("config.file"));
             System.out.println("baseUrl = [" + properties.getProperty("baseUrl") + "]");
         }
