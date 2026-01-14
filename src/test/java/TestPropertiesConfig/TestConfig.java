@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class TestConfig {
 
-    private Properties parseJsonConfig(String json) {
+    public static Properties parseJsonConfig(String json) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(json);
