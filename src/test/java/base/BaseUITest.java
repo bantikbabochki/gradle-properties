@@ -17,7 +17,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Properties;
@@ -34,13 +35,21 @@ public abstract class BaseUITest {
             // Парсим JSON в Properties
             Properties properties = TestConfig.parseJsonConfig(jsonSecret);
 
+            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — НАЧАЛО
+            System.out.println("=== CONFIG DEBUG START ===");
+            System.out.println("JSON length: " + jsonSecret.length());
+            System.out.println("Parsed properties count: " + properties.size());
+            properties.list(System.out); // выводит все ключ=значение
+            System.out.println("=== CONFIG DEBUG END ===");
+            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
+
             // Сохраняем во временный файл
             File temp = new File("build/tmp");
             if (!temp.exists() && !temp.mkdirs()) {
                 throw new RuntimeException("Failed to create directory: " + temp.getAbsolutePath());
             }
             File propFile = new File(temp, "ci.properties");
-            try (FileOutputStream out = new FileOutputStream(propFile)){
+            try (FileOutputStream out = new FileOutputStream(propFile)) {
                 properties.store(out, "Generated from TEST_PROPERTIES_CONTENT");
             } catch (IOException e) {
                 throw new RuntimeException("Failed to write ci.properties", e);
@@ -51,7 +60,7 @@ public abstract class BaseUITest {
         }
 
         // Инициализируем Owner
-        config=ConfigFactory.create(TestPropConfig.class, System.getProperties());
+        config = ConfigFactory.create(TestPropConfig.class, System.getProperties());
     }
 
     @BeforeEach
@@ -77,9 +86,9 @@ public abstract class BaseUITest {
             options.addArguments("--disable-dev-shm-usage"); // Use /tmp instead of /dev/shm
             options.setCapability("goog:loggingPrefs", Map.of("browser", "ALL"));
             try {
-                driver = new RemoteWebDriver(new URL(remoteUrl), options);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Malformed URL for Selenium Remote WebDriver", e);
+                driver = new RemoteWebDriver(new URI(remoteUrl).toURL(), options);
+            } catch (URISyntaxException | MalformedURLException e) {
+                throw new RuntimeException("Malformed URL for Selenium Remote WebDriver" + remoteUrl, e);
             }
         } else {
             Allure.addAttachment("Local run", "No remote driver");
