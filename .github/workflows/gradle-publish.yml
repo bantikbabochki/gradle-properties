@@ -38,14 +38,14 @@ jobs:
       run: chmod +x gradlew
 
     - name: Create config from secret
-      run:
+      run: |
         mkdir -p src/test/resources
         echo "$TEST_PROPERTIES_CONTENT" > src/test/resources/ci.properties
       env:
         TEST_PROPERTIES_CONTENT: ${{ secrets.TEST_PROPERTIES_CONTENT }}
 
     - name: Wait for Selenium Grid to be ready
-      run:
+      run: |
         until curl -s http://localhost:4444/status | grep -q '"ready":true'; do
         echo "Waiting for Selenium Grid..."
         sleep 5
