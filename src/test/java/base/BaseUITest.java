@@ -8,7 +8,9 @@ import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -118,6 +120,23 @@ public abstract class BaseUITest {
             options.addArguments("--disable-dev-shm-usage");
 
             driver = new ChromeDriver(options);
+        }
+    }
+
+    /**
+     * Безопасный клик через JavaScript - работает в headless режиме
+     */
+    protected void safeClick(WebElement element) {
+        try {
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});",
+                    element
+            );
+            Thread.sleep(200);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Interrupted during click", e);
         }
     }
 }
