@@ -1,5 +1,6 @@
 package base;
 
+import TestPropertiesConfig.TestConfig;
 import TestPropertiesConfig.TestPropConfig;
 import io.qameta.allure.Allure;
 import org.aeonbits.owner.ConfigFactory;
@@ -19,7 +20,7 @@ import java.util.Map;
 public abstract class BaseUITest {
     protected WebDriver driver;
     protected WebDriverWait wait;
-    protected TestPropConfig config = ConfigFactory.create(TestPropConfig.class, System.getProperties());
+    protected TestConfig config = new TestConfig();
 
     @BeforeEach
     void setup() {
