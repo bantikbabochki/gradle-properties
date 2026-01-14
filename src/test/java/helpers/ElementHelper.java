@@ -110,43 +110,29 @@ public class ElementHelper {
     }
 
     /**
-     * Безопасный клик с обработкой ElementClickInterceptedException
-     * Сначала пробует обычный клик, если не получается - скроллит и кликает через JS
+     * Безопасный клик - сразу через JavaScript для надежности в headless
      */
     @Step("Безопасный клик на элемент")
     private void safeClick(WebElement element) {
         try {
-            //Ждем, что элемент станет кликабельным
-            wait.until(ExpectedConditions.elementToBeClickable(element));
-            element.click();
-        } catch (ElementClickInterceptedException | TimeoutException e) {
-            //Если элемент перекрыт или не стал кликабельным - используем JS
-            System.out.println("Обычный клик не сработал, использую JavaScript клик");
-            scrollToElement(element);
-        }
-    }
+            // Скроллим к элементу
+            ((JavascriptExecutor) driver).executeScript(
+                    "arguments[0].scrollIntoView({behavior: 'auto', block: 'center'});",
+                    element
+            );
 
-    /**
-     * Скролл к элементу
-     */
-    private void scrollToElement(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
-                element
-        );
-        //Небольшая пауза после скролла
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException ie) {
+            // Небольшая пауза для завершения скролла
+            Thread.sleep(200);
+
+            // Кликаем через JavaScript - это работает даже если элемент перекрыт
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            throw new RuntimeException("Interrupted during click", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to click element: " + element, e);
         }
-    }
-
-    /**
-     * Клик через JavaScript
-     */
-    private void clickViaJavaScript(WebElement element) {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 
 
