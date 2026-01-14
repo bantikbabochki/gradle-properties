@@ -4,11 +4,9 @@ import constants.Constants;
 import org.aeonbits.owner.Config;
 
 @Config.Sources({
-        "file:${config.file}",
         "classpath:ci.properties",
         "classpath:${env}.properties",
-        "classpath:test.properties",
-        "classpath:default.properties"
+        "classpath:test.properties"
 })
 public interface TestPropConfig extends Config {
 
