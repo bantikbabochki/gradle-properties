@@ -35,7 +35,7 @@ public class OpenAllLinksTest extends BaseUITest {
             //Перебирает все ссылки внутри блока
             for (WebElement link : links) {
                 System.out.println(link.getText());
-                link.click();
+                safeClick(link);
                 driver.navigate().back();
             }
         }

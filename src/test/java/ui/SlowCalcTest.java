@@ -4,6 +4,7 @@ import base.BaseUITest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -35,7 +36,8 @@ public class SlowCalcTest extends BaseUITest {
         driver.findElement(calcButtonSevenLocator).click();
         driver.findElement(calcButtonPlusLocator).click();
         driver.findElement(calcButtonNineLocator).click();
-        driver.findElement(calcButtonEqualLocator).click();
+        WebElement click = driver.findElement(calcButtonEqualLocator);
+        safeClick(click);
 
 //        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
         wait.until(ExpectedConditions.textToBe(resultField, "16"));

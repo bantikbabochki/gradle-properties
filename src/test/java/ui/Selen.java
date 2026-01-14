@@ -26,7 +26,8 @@ public class Selen extends BaseUITest {
     void openLoginPageTest() {
         driver.get(config.getBaseUrl());
 
-        driver.findElement(By.xpath("//a[@href = 'login-form.html']")).click();
+        WebElement click = driver.findElement(By.xpath("//a[@href = 'login-form.html']"));
+        safeClick(click);
         WebElement title = driver.findElement(By.className("display-6"));
 
         assertEquals(config.getBaseUrl() + "login-form.html", driver.getCurrentUrl());
