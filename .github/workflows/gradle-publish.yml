@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ui tests
     env:
-      TEST_CONFIG: ${{ secrets.TEST_PROPERTIES_CONTENT }}
+      TEST_PROPERTIES_CONTENT: ${{ secrets.TEST_PROPERTIES_CONTENT }}
 
     permissions:
       contents: write
