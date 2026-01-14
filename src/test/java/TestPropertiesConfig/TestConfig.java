@@ -20,7 +20,7 @@ public class TestConfig {
                 String fieldName = fieldNames.next();
                 JsonNode fieldValue = node.get(fieldName);
                 if (fieldValue != null) {
-                    testProperties.setProperty(fieldName, fieldValue.asText());
+                    testProperties.setProperty(fieldName, fieldValue.asText().trim());
                 }
             }
             return testProperties;
