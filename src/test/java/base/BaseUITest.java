@@ -2,6 +2,7 @@ package base;
 
 import TestPropertiesConfig.TestConfig;
 import TestPropertiesConfig.TestPropConfig;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Allure;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +16,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,41 +30,53 @@ public abstract class BaseUITest {
 
     @BeforeAll
     static void initConfig() {
-        String jsonSecret = System.getenv("EST_PROPERTIES_CONTENT");
-        if (jsonSecret != null && !jsonSecret.trim().isEmpty()) {
-            // Парсим JSON в Properties
-            Properties properties = TestConfig.parseJsonConfig(jsonSecret);
+        String jsonSecret = System.getenv("TEST_PROPERTIES_CONTENT");  // ← ИСПРАВЛЕНО!
 
-            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — НАЧАЛО
-            System.out.println("=== CONFIG DEBUG START ===");
+        System.out.println("=== CONFIG INIT DEBUG ===");
+        System.out.println("TEST_PROPERTIES_CONTENT exists: " + (jsonSecret != null));
+        if (jsonSecret != null) {
             System.out.println("JSON length: " + jsonSecret.length());
-            System.out.println("Parsed properties count: " + properties.size());
-            properties.list(System.out); // выводит все ключ=значение
-            System.out.println("=== CONFIG DEBUG END ===");
-            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
+            System.out.println("JSON preview: " + jsonSecret.substring(0, Math.min(100, jsonSecret.length())));
+        }
 
-            // Сохраняем во временный файл
-            File temp = new File("src/test/resources/ci.properties");
-            temp.getParentFile().mkdirs();// гарантирует, что папка существует
+        if (jsonSecret != null && !jsonSecret.trim().isEmpty()) {
+            try {
+                // Парсим JSON в Properties
+                Properties properties = TestConfig.parseJsonConfig(jsonSecret);
 
-            // Записываем файл
-            try (FileOutputStream out = new FileOutputStream(temp)) {
-                properties.store(out, "Generated from TEST_PROPERTIES_CONTENT");
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to write ci.properties", e);
+                System.out.println("Parsed properties count: " + properties.size());
+                System.out.println("baseUrl from properties: [" + properties.getProperty("baseUrl") + "]");
+
+                // Создаем директорию
+                File tempDir = new File("build/tmp");
+                tempDir.mkdirs();
+
+                // Сохраняем во временный файл
+                File temp = new File("build/tmp/ci.properties");  // ← ИСПРАВЛЕНО!
+
+                try (FileOutputStream out = new FileOutputStream(temp)) {
+                    properties.store(out, "Generated from TEST_PROPERTIES_CONTENT");
+                }
+
+                System.out.println("ci.properties created at: " + temp.getAbsolutePath());
+                System.out.println("ci.properties exists: " + temp.exists());
+
+            } catch (Exception e) {
+                System.err.println("ERROR parsing TEST_PROPERTIES_CONTENT: " + e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("Failed to parse TEST_PROPERTIES_CONTENT", e);
             }
-
-            // ДИАГНОСТИКА (удалить после отладки)
-            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — НАЧАЛО
-            System.out.println("=== CONFIG DEBUG ===");
-            System.out.println("ci.properties path: " + temp.getAbsolutePath());
-            System.out.println("baseUrl = [" + properties.getProperty("baseUrl") + "]");
-            System.out.println("====================");
-            // 🔍 ВРЕМЕННАЯ ДИАГНОСТИКА — КОНЕЦ
+        } else {
+            System.out.println("No TEST_PROPERTIES_CONTENT found, using default properties");
         }
 
         // Инициализируем Owner
         config = ConfigFactory.create(TestPropConfig.class, System.getProperties());
+
+        // Проверяем что config работает
+        System.out.println("Config baseUrl: [" + config.getBaseUrl() + "]");
+        System.out.println("Config dropdownMenuUrl: [" + config.getDropdownMenuUrl() + "]");
+        System.out.println("=========================");
     }
 
     @BeforeEach
@@ -90,13 +102,22 @@ public abstract class BaseUITest {
             options.addArguments("--disable-dev-shm-usage"); // Use /tmp instead of /dev/shm
             options.setCapability("goog:loggingPrefs", Map.of("browser", "ALL"));
             try {
+                Allure.addAttachment("Remote run", "Using Selenium at: " + remoteUrl);
                 driver = new RemoteWebDriver(new URI(remoteUrl).toURL(), options);
             } catch (URISyntaxException | MalformedURLException e) {
                 throw new RuntimeException("Malformed URL for Selenium Remote WebDriver" + remoteUrl, e);
             }
         } else {
-            Allure.addAttachment("Local run", "No remote driver");
-            driver = new ChromeDriver();
+            Allure.addAttachment("Local run", "Using local ChromeDriver");
+            WebDriverManager.chromedriver().setup();  // ← ДОБАВЛЕНО!
+
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+
+            driver = new ChromeDriver(options);
         }
     }
 }
