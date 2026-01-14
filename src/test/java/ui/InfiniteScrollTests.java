@@ -30,7 +30,7 @@ public class InfiniteScrollTests extends BaseUITest {
         List<WebElement> paragraphs = driver.findElements(By.xpath("//p[@class='lead']"));
 
         assertEquals(20, paragraphs.size(),"Ошибка на первом этапе");
-        assertTrue(paragraphs.getFirst().getText().contains("Lorem ipsum dolor sit amet"), "Ошибка на первом этапе");
+        assertTrue(paragraphs.get(0).getText().contains("Lorem ipsum dolor sit amet"), "Ошибка на первом этапе");
 
         WebElement lastParagraph = paragraphs.get(19);
         Actions last = new Actions(driver);
