@@ -1,6 +1,7 @@
 package TestPropertiesConfig;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,6 +27,17 @@ public class TestConfig {
 
     private Properties getPropertiesByEnv(String env) {
         Properties testProperties = new Properties();
+        // Сначала попробуем загрузить из секрета (переменная окружения)
+        String ciConfig = System.getenv("TEST_PROPERTIES_CONTENT");
+        if (ciConfig != null && !ciConfig.trim().isEmpty()) {
+            try {
+                testProperties.load(new StringReader(ciConfig));
+                return testProperties;
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to parse TEST_PROPERTIES_CONTENT", e);
+            }
+        }
+        //если конфиг пустой или null
         try {
             testProperties.load(getClass().getClassLoader().getResourceAsStream(env + ".properties"));
         } catch (IOException e) {
