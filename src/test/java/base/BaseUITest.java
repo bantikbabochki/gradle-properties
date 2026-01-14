@@ -49,6 +49,8 @@ public abstract class BaseUITest {
                 throw new RuntimeException("Failed to create directory: " + temp.getAbsolutePath());
             }
             File propFile = new File(temp, "ci.properties");
+
+            // Записываем файл
             try (FileOutputStream out = new FileOutputStream(propFile)) {
                 properties.store(out, "Generated from TEST_PROPERTIES_CONTENT");
             } catch (IOException e) {
@@ -56,7 +58,11 @@ public abstract class BaseUITest {
             }
 
             // Передаём путь через системное свойство
-            System.setProperty("config.file", propFile.getAbsolutePath());
+            System.setProperty("config.file", "file://" + propFile.getAbsolutePath());
+
+            // ДИАГНОСТИКА (удалить после отладки)
+            System.out.println("Using config file: " + System.getProperty("config.file"));
+            System.out.println("baseUrl = [" + properties.getProperty("baseUrl") + "]");
         }
 
         // Инициализируем Owner
