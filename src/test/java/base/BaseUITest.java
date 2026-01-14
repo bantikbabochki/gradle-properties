@@ -1,9 +1,11 @@
 package base;
 
+import TestPropertiesConfig.TestConfig;
 import TestPropertiesConfig.TestPropConfig;
 import io.qameta.allure.Allure;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,15 +13,46 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Map;
+import java.util.Properties;
 
 public abstract class BaseUITest {
     protected WebDriver driver;
     protected WebDriverWait wait;
-    protected TestPropConfig config = ConfigFactory.create(TestPropConfig.class, System.getProperties());
+    protected static TestPropConfig config;
+
+    @BeforeAll
+    static void initConfig() {
+        String jsonSecret = System.getenv("EST_PROPERTIES_CONTENT");
+        if (jsonSecret != null && !jsonSecret.trim().isEmpty()) {
+            // Парсим JSON в Properties
+            Properties properties = TestConfig.parseJsonConfig(jsonSecret);
+
+            // Сохраняем во временный файл
+            File temp = new File("build/tmp");
+            if (!temp.exists() && !temp.mkdirs()) {
+                throw new RuntimeException("Failed to create directory: " + temp.getAbsolutePath());
+            }
+            File propFile = new File(temp, "ci.properties");
+            try (FileOutputStream out = new FileOutputStream(propFile)){
+                properties.store(out, "Generated from TEST_PROPERTIES_CONTENT");
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to write ci.properties", e);
+            }
+
+            // Передаём путь через системное свойство
+            System.setProperty("config.file", propFile.getAbsolutePath());
+        }
+
+        // Инициализируем Owner
+        config=ConfigFactory.create(TestPropConfig.class, System.getProperties());
+    }
 
     @BeforeEach
     void setup() {
