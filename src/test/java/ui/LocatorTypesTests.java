@@ -11,12 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class LocatorTypesTests extends BaseUITest {
-    ElementHelper elementHelper;
 
     @BeforeEach
     void open() {
         driver.get(config.getWebFormUrl());
-        elementHelper = new ElementHelper(driver);
     }
 
     @Test
