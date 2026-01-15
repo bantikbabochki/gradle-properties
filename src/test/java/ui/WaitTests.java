@@ -20,12 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WaitTests extends BaseUITest {
 
-    ElementHelper elementHelper;
-
     @BeforeEach
     public void initPage() {
         driver.get(config.getLoadingImagesUrl());
-        elementHelper = new ElementHelper(driver);
     }
 
     @Test
