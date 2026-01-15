@@ -21,12 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NavigationExampleTests extends BaseUITest {
-    ElementHelper elementHelper;
 
     @BeforeEach
     public void initNavigationPage() {
         driver.get(config.getNavigationUrl());
-        elementHelper = new ElementHelper(driver);
     }
 
     @Test
