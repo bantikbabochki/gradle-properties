@@ -3,6 +3,8 @@ package helpers;
 import enums.LocatorType;
 import io.qameta.allure.Step;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
