@@ -28,12 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InteractionsWithElementsTests extends BaseUITest {
 
-    private ElementHelper elementHelper;
-
     @BeforeEach
     public void initWebForm() {
         driver.get(config.getWebFormUrl());
-        elementHelper = new ElementHelper(driver);
     }
 
     @Test
@@ -180,14 +177,14 @@ public class InteractionsWithElementsTests extends BaseUITest {
         // имя файла задаём как переменную
         String fileName = "new.txt";
         // получаем абсолютный путь через FileUpload
-        String absolutePath = FileUpload.getPath(fileName);
+        //String absolutePath = FileUpload.getPath(fileName);
         // загружаем файл
-        fileInput.sendKeys(absolutePath);
+        fileUpload.uploadFileFromResources(fileInput, fileName);
         elementHelper.clickSubmitButton(LocatorType.CSS_SELECTOR, "[type='submit']");
         // Явное ожидание, пока URL изменится
         new WebDriverWait(driver, Duration.ofSeconds(1))
                 .until(ExpectedConditions.urlContains("submitted-form.html"));
         // проверка: имя файла появилось в UI
-        assertThat(driver.getCurrentUrl()).contains("new.txt");
+        assertThat(driver.getCurrentUrl()).contains(fileName);
     }
 }
