@@ -2,8 +2,10 @@ package base;
 
 import TestPropertiesConfig.TestConfig;
 import TestPropertiesConfig.TestPropConfig;
+import helpers.ElementHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Allure;
+import methods.FileUpload;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,9 +28,15 @@ import java.util.Map;
 import java.util.Properties;
 
 public abstract class BaseUITest {
+    public static final boolean IS_REMOTE =
+            System.getenv("SELENIUM_REMOTE_URL") != null &&
+                    !System.getenv("SELENIUM_REMOTE_URL").isEmpty();
     protected WebDriver driver;
     protected WebDriverWait wait;
     protected static TestPropConfig config;
+    protected FileUpload fileUpload;
+    protected ElementHelper elementHelper;
+
 
     @BeforeAll
     static void initConfig() {
@@ -87,6 +95,9 @@ public abstract class BaseUITest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(2));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+
+        fileUpload = new FileUpload(driver);
+        elementHelper = new ElementHelper(driver);
     }
 
     @AfterEach
