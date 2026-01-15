@@ -27,14 +27,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WebFormTests extends BaseUITest {
 
-    ElementHelper elementHelper;
-
     private static final Faker fake = new Faker(Locale.ENGLISH);
 
     @BeforeEach
     public void initWebPage() {
         driver.get(config.getWebFormUrl());
-        elementHelper = new ElementHelper(driver);
     }
 
     @Test
@@ -340,11 +337,11 @@ public class WebFormTests extends BaseUITest {
         //Проверяем состояние чек-бокса (оператор ^ XOR→ он проверяет, что ровно один из двух условий истинный)
         assertTrue(checkedRadio.isSelected() ^ defaultRadio.isSelected(), "Должен быть включен только один чек-бокс");
         //Проверяем checkedRadio
-        checkedRadio.click();
+        safeClick(checkedRadio);
         assertTrue(checkedRadio.isSelected(), "checkedRadio должен быть включен");
         assertFalse(defaultRadio.isSelected(), "defaultRadio должен быть выключен");
         //Проверяем defaultRadio
-        defaultRadio.click();
+        safeClick(defaultRadio);
         assertTrue(defaultRadio.isSelected(), "defaultRadio должен быть включен");
         assertFalse(checkedRadio.isSelected(), "checkedRadio должен быть выключен");
     }
