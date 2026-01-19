@@ -1,6 +1,6 @@
 package TestPropertiesConfig;
 
-import constants.Constants;
+import api.constant.CommonConstants;
 import org.aeonbits.owner.Config;
 
 @Config.Sources({
@@ -11,7 +11,7 @@ import org.aeonbits.owner.Config;
 public interface TestPropConfig extends Config {
 
     @Key("baseUrl")
-    @DefaultValue(Constants.BASE_URL)
+    @DefaultValue(CommonConstants.UI_BASE_URL)
     String getBaseUrl();
 
     @Key("webFormUrl")
