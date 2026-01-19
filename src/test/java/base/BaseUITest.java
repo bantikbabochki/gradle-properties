@@ -33,6 +33,7 @@ public abstract class BaseUITest {
                     !System.getenv("SELENIUM_REMOTE_URL").isEmpty();
     protected WebDriver driver;
     protected WebDriverWait wait;
+    protected WebDriverWait longWait;
     protected static TestPropConfig config;
     protected FileUpload fileUpload;
     protected ElementHelper elementHelper;
@@ -93,6 +94,7 @@ public abstract class BaseUITest {
     void setup() {
         initDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        longWait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
 
