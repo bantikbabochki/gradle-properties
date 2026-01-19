@@ -33,6 +33,7 @@ public class WaitTests extends BaseUITest {
         //Проверка, что строка содержит слово "landscape", без учёта регистра.
         assertThat(landscape.getDomAttribute("src"))
                 .isNotEmpty()
+                .as("Error in search compass")
                 .containsIgnoringCase("landscape");
     }
 
@@ -41,6 +42,12 @@ public class WaitTests extends BaseUITest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         WebElement landscape = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("landscape")));
+        assertThat(landscape.getDomAttribute("src")).containsIgnoringCase("landscape");
+    }
+
+    @Test
+    void loadingImagesExplicitLongWaitTest() {
+        WebElement landscape = longWait.until(ExpectedConditions.presenceOfElementLocated(By.id("landscape")));
         assertThat(landscape.getDomAttribute("src")).containsIgnoringCase("landscape");
     }
 
