@@ -81,4 +81,13 @@ public class UserController {
                 .delete(USER_ENDPOINT + "/" + username)
                 .andReturn();
     }
+
+    @Step("GetUser as object")
+    public User getUserAsUser (String username) {
+        return given(this.requestSpecification)
+                .when()
+                .get(USER_ENDPOINT + "/" + username)
+                .as(User.class);
+
+    }
 }
