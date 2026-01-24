@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static api.utils.PdfUtils.savePdf;
+import static utils.PdfUtils.savePdf;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
