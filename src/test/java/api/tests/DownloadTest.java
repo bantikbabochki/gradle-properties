@@ -13,7 +13,10 @@ public class DownloadTest {
     @Test
     void downloadTest() {
         String endpointURI = "https://cdn.tbank.ru/static/documents/9e3b3324-f3a4-4060-927b-9147ede2958c.pdf";
-        String fileName = "TbankDownloaded.pdf";
+        String downloadDir = "downloads/";
+        String fileName = downloadDir + "TbankDownloaded.pdf";
+        // Убедитесь, что папка существует
+        new File(downloadDir).mkdirs();
 
         Response response = given()
                 .when()
