@@ -1,6 +1,7 @@
 package api.tests;
 
 import api.controllers.FluentUserController;
+import api.controllers.FluentUserControllerWithRetry;
 import api.tests.base.BaseApiTest;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
@@ -33,6 +34,19 @@ public class FluentControllerApiTests extends BaseApiTest {
                 .statusCodeIs(200)
                 .getJsonValue("message");
         fluentUserController.getUser(DEFAULT_USER.getUsername())
+                .statusCodeIs(200)
+                .jsonValueIs("id", expectedID)
+                .jsonValueIs("username", DEFAULT_USER.getUsername())
+                .jsonValueIs("email", DEFAULT_USER.getEmail());
+    }
+
+    @Test
+    void getUserWithRetryTest() throws InterruptedException {
+        FluentUserControllerWithRetry fluentUserControllerWithRetry = new FluentUserControllerWithRetry();
+        String expectedID = fluentUserController.addDefaultUser()
+                .statusCodeIs(200)
+                .getJsonValue("message");
+        fluentUserControllerWithRetry.getUserWithRetry(DEFAULT_USER.getUsername())
                 .statusCodeIs(200)
                 .jsonValueIs("id", expectedID)
                 .jsonValueIs("username", DEFAULT_USER.getUsername())
