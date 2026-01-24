@@ -10,11 +10,12 @@ import java.io.IOException;
 public class DocUtils {
     public static boolean searchText(String filePath, String textToFind) throws FileNotFoundException {
         try (FileInputStream fis = new FileInputStream(filePath);
-             XWPFDocument document = new XWPFDocument(fis)) {
+             XWPFDocument document = new XWPFDocument(fis)) { //XWPFDocument - парсит .docx и даёт доступ к структуре документа
             boolean textFound = false;
 
-            for (XWPFParagraph paragraph : document.getParagraphs()) {
-                if (paragraph.getText().contains(textToFind)) {
+            for (XWPFParagraph paragraph : document.getParagraphs()) { //XWPFParagraph - Абзац (параграф) в документе
+                if (paragraph.getText().contains(textToFind)) {//paragraph.getText() — объединяет
+                    // всё содержимое абзаца (включая форматирование) в одну строку
                     textFound = true;
                     break;
                 }
