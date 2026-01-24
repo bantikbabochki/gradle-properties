@@ -9,6 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ExcelUtils {
+    /*
+    Workbook - Весь файл Excel
+    Sheet - Один лист (вкладка) в книге
+    Row -  Строка на листе
+    Cell - Ячейка в строке
+     */
     public static void printText(String filePath) throws FileNotFoundException {
         try(InputStream fis = new FileInputStream(filePath);
             Workbook workbook = new XSSFWorkbook(fis)) {
