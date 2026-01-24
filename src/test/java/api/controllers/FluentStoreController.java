@@ -8,6 +8,7 @@ import io.restassured.parsing.Parser;
 import io.restassured.specification.RequestSpecification;
 
 import static api.constant.CommonConstants.BASE_URI;
+import static api.testdata.TestDataStore.DEFAULT_ORDER;
 import static io.restassured.RestAssured.given;
 
 public class FluentStoreController {
