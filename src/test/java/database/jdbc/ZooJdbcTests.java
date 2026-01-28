@@ -1,7 +1,6 @@
 package database.jdbc;
 
 import api.tests.base.BaseApiTest;
-import database.CRUDUtils;
 import database.DatabaseUtils;
 import database.jdbc.models.Animal;
 import org.junit.jupiter.api.AfterAll;
