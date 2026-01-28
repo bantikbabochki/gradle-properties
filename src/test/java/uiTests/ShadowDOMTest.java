@@ -1,4 +1,4 @@
-package ui;
+package uiTests;
 
 import base.BaseUITest;
 import org.junit.jupiter.api.Test;

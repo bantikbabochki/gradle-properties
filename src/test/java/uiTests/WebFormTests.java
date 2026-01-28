@@ -1,10 +1,9 @@
-package ui;
+package uiTests;
 
 import base.BaseUITest;
 import com.github.javafaker.Faker;
 import elements.WebFormLocators;
 import enums.LocatorType;
-import helpers.ElementHelper;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.BeforeEach;

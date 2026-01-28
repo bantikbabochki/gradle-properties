@@ -1,8 +1,7 @@
-package ui;
+package uiTests;
 
 import base.BaseUITest;
 import enums.LocatorType;
-import helpers.ElementHelper;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;

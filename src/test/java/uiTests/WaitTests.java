@@ -1,8 +1,7 @@
-package ui;
+package uiTests;
 
 import base.BaseUITest;
 import enums.LocatorType;
-import helpers.ElementHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;

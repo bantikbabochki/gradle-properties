@@ -1,11 +1,9 @@
-package ui;
+package uiTests;
 
 import base.BaseUITest;
 import enums.LocatorType;
-import helpers.ElementHelper;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import methods.FileUpload;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;

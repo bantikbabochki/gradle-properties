@@ -1,4 +1,4 @@
-package ui;
+package uiTests;
 
 import base.BaseUITest;
 import io.qameta.allure.Severity;
