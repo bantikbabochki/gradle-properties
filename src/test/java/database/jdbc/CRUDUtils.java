@@ -1,7 +1,6 @@
-package database;
+package database.jdbc;
 
 
-import database.jdbc.DatabaseConnection;
 import database.jdbc.models.Animal;
 import database.jdbc.models.Place;
 import database.jdbc.models.Workman;
