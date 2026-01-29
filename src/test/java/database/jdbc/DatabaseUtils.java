@@ -1,6 +1,4 @@
-package database;
-
-import database.jdbc.DatabaseConnection;
+package database.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -39,7 +37,7 @@ public class DatabaseUtils {
                     \tCONSTRAINT animal_pk PRIMARY KEY (id),
                     \tCONSTRAINT animal_fk FOREIGN KEY ("type") REFERENCES "types"(id),
                     \tCONSTRAINT animal_fk_1 FOREIGN KEY (sex) REFERENCES sex(id),
-                    \tCONSTRAINT animal_fk_2 FOREIGN KEY (place) REFERENCES places(id) DEFERRABLE
+                    \tCONSTRAINT animal_fk_2 FOREIGN KEY (places) REFERENCES places(id) DEFERRABLE
                     );""");
             executeUpdate("""
                     CREATE TABLE positions(
@@ -88,16 +86,16 @@ public class DatabaseUtils {
                     INSERT INTO "types" (id, "name") VALUES(4, 'Птица');
                     INSERT INTO "types" (id, "name") VALUES(5, 'Рыба');""");
             executeUpdate("""
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(1, 'Бусинка', 2, 1, 1, 1);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(2, 'Пчелка', 4, 2, 1, 1);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(3, 'Иваныч', 5, 2, 1, 2);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(4, 'По', 6, 3, 2, 2);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(5, 'Абрикос', 7, 4, 2,3);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(6, 'Кекс', 3, 5, 2, 4);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(7, 'Плюша', 5, 3, 1, 5);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(8, 'Жулик', 7, 2, 1, 3);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(9, 'Пончик', 4, 1, 1, 2);
-                    INSERT INTO animal (id, "name", age, "type", sex, place) VALUES(10, 'Котлета', 5, 2, 1, 4);""");
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(1, 'Бусинка', 2, 1, 1, 1);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(2, 'Пчелка', 4, 2, 1, 1);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(3, 'Иваныч', 5, 2, 1, 2);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(4, 'По', 6, 3, 2, 2);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(5, 'Абрикос', 7, 4, 2,3);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(6, 'Кекс', 3, 5, 2, 4);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(7, 'Плюша', 5, 3, 1, 5);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(8, 'Жулик', 7, 2, 1, 3);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(9, 'Пончик', 4, 1, 1, 2);
+                    INSERT INTO animal (id, "name", age, "type", sex, places) VALUES(10, 'Котлета', 5, 2, 1, 4);""");
             executeUpdate("""
                     INSERT INTO positions (id, "name", salary) VALUES(1, 'Старший дворник', 25000);
                     INSERT INTO positions (id, "name", salary) VALUES(2, 'Дворник', 20000);
