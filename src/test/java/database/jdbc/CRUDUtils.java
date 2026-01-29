@@ -2,7 +2,7 @@ package database.jdbc;
 
 
 import database.jdbc.models.Animal;
-import database.jdbc.models.Place;
+import database.jdbc.models.Places;
 import database.jdbc.models.Workman;
 import database.jdbc.models.Zoo;
 import lombok.SneakyThrows;
@@ -141,14 +141,14 @@ public class CRUDUtils {
      * Create - Insert new place
      */
     @SneakyThrows
-    public static void createPlace(Place place) {
+    public static void createPlace(Places places) {
         String sql = "INSERT INTO place (id, \"row\", place_num, \"name\") VALUES (?, ?, ?, ?)";
         Connection connection = DatabaseConnection.createConnection();
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, place.getId());
-        ps.setInt(2, place.getRow());
-        ps.setInt(3, place.getPlace_num());
-        ps.setString(4, place.getName());
+        ps.setInt(1, places.getId());
+        ps.setInt(2, places.getRow());
+        ps.setInt(3, places.getPlace_num());
+        ps.setString(4, places.getName());
         ps.executeUpdate(); //executeUpdate() - для INSERT, UPDATE, DELETE (изменяют данные)
     }
 
@@ -156,7 +156,7 @@ public class CRUDUtils {
      * Read - Get place by ID
      */
     @SneakyThrows
-    public static Place getPlaceById(int id) {
+    public static Places getPlaceById(int id) {
         String sql = "SELECT * FROM place WHERE id = ?";
         Connection connection = DatabaseConnection.createConnection();
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -170,7 +170,7 @@ public class CRUDUtils {
             → Возвращает true, если строка есть - возвращаем найденное животное
             → Возвращает false, если строк больше нет - животное не найдено, вернём null
              */
-            return Place.builder() //Начинает построение объекта Animal через Builder pattern
+            return Places.builder() //Начинает построение объекта Animal через Builder pattern
                     .id(rs.getInt("id")) //- читает значение из ResultSet
                     .row(rs.getInt("row"))
                     .place_num(rs.getInt("place_num"))
@@ -184,7 +184,7 @@ public class CRUDUtils {
      * Read - Get all places
      */
     @SneakyThrows
-    public static List<Place> getAllPlaces() {
+    public static List<Places> getAllPlaces() {
         return getPlaceData("SELECT * FROM place");
     }
 
@@ -192,14 +192,14 @@ public class CRUDUtils {
      * Read - Get places by custom query
      */
     @SneakyThrows
-    public static List<Place> getPlaceData(String query) {
-        List<Place> places = new ArrayList<>();
+    public static List<Places> getPlaceData(String query) {
+        List<Places> places = new ArrayList<>();
         Connection connection = DatabaseConnection.createConnection();
         PreparedStatement ps = connection.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {  // - цикл, выполняется пока условие true
-            places.add(Place.builder()
+            places.add(Places.builder()
                     .id(rs.getInt("id")) //- читает значение из ResultSet
                     .row(rs.getInt("row"))
                     .place_num(rs.getInt("place_num"))
@@ -213,14 +213,14 @@ public class CRUDUtils {
      * Update - Update existing place
      */
     @SneakyThrows
-    public static void updatePlace(Place place) {
+    public static void updatePlace(Places places) {
         String sql = "UPDATE place SET \"row\" = ?, place_num = ?, \"name\" = ? WHERE id  = ?";
         Connection connection = DatabaseConnection.createConnection();
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, place.getRow());
-        ps.setInt(2, place.getPlace_num());
-        ps.setString(3, place.getName());
-        ps.setInt(4, place.getId());
+        ps.setInt(1, places.getRow());
+        ps.setInt(2, places.getPlace_num());
+        ps.setString(3, places.getName());
+        ps.setInt(4, places.getId());
         ps.executeUpdate(); //executeUpdate() - для INSERT, UPDATE, DELETE (изменяют данные)
     }
 

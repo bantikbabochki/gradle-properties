@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Place {
+public class Places {
     private int id;
     private int row;
     private int place_num;
