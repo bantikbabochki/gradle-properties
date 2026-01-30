@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- ========== НАСТРОЙКИ ПОДКЛЮЧЕНИЯ К БД ========== -->
+
+        <!-- H2 In-Memory (для тестов) -->
+        <property name="hibernate.connection.driver_class">org.h2.Driver</property>
+        <property name="hibernate.connection.url">jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1</property>
+        <property name="hibernate.connection.username">sa</property>
+        <property name="hibernate.connection.password">sa</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
+
+        <!-- PostgreSQL (раскомментируйте для реальной БД)
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/zoo_db</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">your_password</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        -->
+
+        <!-- MySQL (альтернатива)
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/zoo_db</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">password</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        -->
+
+        <!-- ========== НАСТРОЙКИ HIBERNATE ========== -->
+
+        <!-- Показывать SQL в консоли -->
+        <property name="hibernate.show_sql">true</property>
+
+        <!-- Форматировать SQL (красиво) -->
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Комментарии в SQL -->
+        <property name="hibernate.use_sql_comments">true</property>
+
+        <!-- Автоматическое создание/обновление схемы БД -->
+        <!-- create - создаёт заново (удаляет старые данные) -->
+        <!-- update - обновляет схему, данные сохраняются -->
+        <!-- validate - только проверяет соответствие -->
+        <!-- none - ничего не делает -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!-- Connection Pool (HikariCP) -->
+        <property name="hibernate.connection.provider_class">
+            org.hibernate.hikaricp.internal.HikariCPConnectionProvider
+        </property>
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
+        <property name="hibernate.hikari.minimumIdle">2</property>
+
+        <!-- Кеширование второго уровня (опционально) -->
+        <property name="hibernate.cache.use_second_level_cache">false</property>
+
+        <!-- Контекст текущей сессии -->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!-- ========== РЕГИСТРАЦИЯ ENTITY КЛАССОВ ========== -->
+
+        <!-- Здесь перечисляем все классы-сущности -->
+        <mapping class="database.hibernate.entities.Animal"/>
+        <mapping class="database.hibernate.entities.Places"/>
+        <mapping class="database.hibernate.entities.Workman"/>
+        <mapping class="database.hibernate.entities.Zoo"/>
+        <mapping class="database.hibernate.entities.Sex"/>
+        <mapping class="database.hibernate.entities.Type"/>
+        <mapping class="database.hibernate.entities.Position"/>
+
+    </session-factory>
+</hibernate-configuration>
