@@ -61,4 +61,7 @@ public interface TestPropConfig extends Config {
 
     @Key("password")
     String getPassword();
+
+    @Key("selenium.remote.url")
+    String getSeleniumRemoteUrl();
 }
